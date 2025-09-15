@@ -39,7 +39,7 @@ class _HeroSectionState extends State<HeroSection> {
     final isDesktop = MediaQuery.of(context).size.width > 800;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: screenHeight - kToolbarHeight,
+      height: screenHeight,
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -59,8 +59,6 @@ class _HeroSectionState extends State<HeroSection> {
               right: 0,
               bottom: 0,
               child: AnimatedCirclesWidget()),
-
-          // // INSERT_YOUR_CODE
           ClipRRect(
             child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
@@ -77,6 +75,9 @@ class _HeroSectionState extends State<HeroSection> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
                   const Spacer(),
                   Text(
                     languageController.getText(AppStrings.home, 'title'),

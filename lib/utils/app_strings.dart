@@ -196,8 +196,8 @@ class AppStrings {
       'role_en': 'Complete app development with Flutter (iOS/Android).',
       'link': 'https://apps.apple.com/us/app/2gether-social/id6740913405',
     },
-    'filmaor': {
-      'title': 'Filmaor',
+    'filmator': {
+      'title': 'Filmator',
       'date_fa': 'آبان ۱۴۰۲',
       'date_en': 'Nov 2023',
       'description_fa': 'سیستم نمایش خانگی برای ارائه محتوای ویدیویی آنلاین.',

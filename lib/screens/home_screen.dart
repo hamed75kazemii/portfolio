@@ -6,6 +6,7 @@ import 'package:hamed_portfolio/controllers/home_controller.dart';
 import 'package:hamed_portfolio/controllers/theme_controller.dart';
 import 'package:hamed_portfolio/controllers/language_controller.dart';
 import 'package:hamed_portfolio/method/tap_handler.dart';
+import 'package:hamed_portfolio/utils/screen_utils.dart';
 import 'package:hamed_portfolio/utils/section_enum.dart';
 import 'package:hamed_portfolio/widgets/hero/hero_section.dart';
 import 'package:hamed_portfolio/widgets/about_section.dart';
@@ -59,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             controller: scrollController,
             slivers: [
               // Home Hero Section
@@ -111,8 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(
             () {
               if (homeController.isOpenMenu) {
-                return const Positioned(
-                    top: 100, left: 50, right: 50, child: MobileMenu());
+                return Positioned(
+                    top: kToolbarHeight + 20,
+                    left: ScreenUtil.getScreenEdgePadding(context),
+                    right: ScreenUtil.getScreenEdgePadding(context),
+                    child: const MobileMenu());
               } else {
                 return const SizedBox();
               }

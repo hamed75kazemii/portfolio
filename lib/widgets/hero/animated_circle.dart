@@ -97,7 +97,7 @@ class _AnimatedCircleState extends State<AnimatedCircle>
       children: [
         // Top Left Circle - Green, Size 10
         Positioned(
-          top: 40,
+          top: 100,
           left: 30,
           child: AnimatedBuilder(
             animation: _topLeftAnimation,
@@ -119,7 +119,7 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
         // Top Right Circle - Orange, Size 7
         Positioned(
-          top: 20,
+          top: 120,
           right: 50,
           child: AnimatedBuilder(
             animation: _topRightAnimation,
