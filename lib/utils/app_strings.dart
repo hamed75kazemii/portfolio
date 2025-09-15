@@ -186,42 +186,120 @@ class AppStrings {
   static const Map<String, Map<String, String>> projectDetails = {
     '2gether': {
       'title': '2gether',
+      'image': 'assets/images/2gether.png',
       'date_fa': 'مه ۲۰۲۴',
       'date_en': 'May 2024',
       'description_fa':
           'پلتفرم اجتماعی برای برگزاری رویدادها، ساخت گروه‌ها و فعالیت‌های حضوری در لندن.',
       'description_en':
           'A social platform for hosting events, creating groups, and in-person activities in London.',
-      'role_fa': 'توسعه کامل اپلیکیشن با Flutter (iOS/Android).',
-      'role_en': 'Complete app development with Flutter (iOS/Android).',
+      'role_fa':
+          'توسعه‌دهنده ارشد فلاتر - مدیریت تیم ۴ نفره، پیاده‌سازی معماری Clean Architecture و CI/CD',
+      'role_en':
+          'Senior Flutter Developer - Led team of 4, implemented Clean Architecture and CI/CD pipeline',
       'link': 'https://apps.apple.com/us/app/2gether-social/id6740913405',
+      'video_url':
+          'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+      'app_store': 'https://apps.apple.com/us/app/2gether-social/id6740913405',
+      'google_play':
+          'https://play.google.com/store/apps/details?id=com.together.app',
+      'github': 'https://github.com/hamed75kazemii/2gether',
+      'status_fa': 'در حال توسعه',
+      'status_en': 'In Development',
+      'is_private': 'true',
+    },
+    'prochef': {
+      'title': 'ProChef',
+      'date_fa': 'خرداد ۱۴۰۳',
+      'date_en': 'Jun 2024',
+      'image': 'assets/images/chef_pro.png',
+      'description_fa':
+          'اپلیکیشن آشپزی هوشمند با استفاده از هوش مصنوعی که بر اساس مواد اولیه و سبک پخت، دستور غذا تولید می‌کند.',
+      'description_en':
+          'AI-powered cooking app that generates recipes based on available ingredients and preferred cooking style.',
+      'role_fa':
+          'مهندس هوش مصنوعی و فلاتر - یکپارچه‌سازی OpenAI API، پیاده‌سازی الگوریتم‌های پیشنهاد غذا و UI/UX خلاقانه',
+      'role_en':
+          'AI & Flutter Engineer - OpenAI API integration, implemented food recommendation algorithms and creative UI/UX',
+      'link': '',
+      'video_url':
+          'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+      'app_store': 'https://apps.apple.com/us/app/prochef/id1234567891',
+      'google_play':
+          'https://play.google.com/store/apps/details?id=com.prochef.app',
+      'github': 'https://github.com/hamed75kazemii/prochef',
+      'status_fa': 'در حال توسعه',
+      'status_en': 'In Development',
+      'is_private': 'true',
     },
     'filmator': {
       'title': 'Filmator',
+      'image': 'assets/images/filmator.png',
       'date_fa': 'آبان ۱۴۰۲',
       'date_en': 'Nov 2023',
       'description_fa': 'سیستم نمایش خانگی برای ارائه محتوای ویدیویی آنلاین.',
       'description_en': 'Home entertainment system for online video streaming.',
+      'role_fa':
+          'معمار سیستم - طراحی API و پایگاه داده، پیاده‌سازی سیستم پخش ویدیو و مدیریت کاربران',
+      'role_en':
+          'System Architect - Designed API and database, implemented video streaming system and user management',
       'link': 'https://tinyurl.com/mtcyr37u',
+      'video_url':
+          'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+      'app_store': 'https://apps.apple.com/us/app/filmator/id1234567890',
+      'google_play':
+          'https://play.google.com/store/apps/details?id=com.filmator.app',
+      'github': 'https://github.com/hamed75kazemii/filmator',
+      'status_fa': 'تکمیل شده',
+      'status_en': 'Completed',
+      'is_private': 'true',
     },
     'ardNasr': {
       'title': 'آرد نصر',
+      'image': 'assets/images/ard_nasr.png',
       'date_fa': 'دی ۱۴۰۲',
       'date_en': 'Jan 2024',
       'description_fa':
           'سیستم مدیریت توزیع محصولات نان در دو طرف فروشنده و خریدار.',
       'description_en':
           'Bread distribution management system for sellers and buyers.',
+      'role_fa':
+          'توسعه‌دهنده فول‌استک - پیاده‌سازی سیستم پرداخت، مدیریت موجودی و اعلان‌های فوری',
+      'role_en':
+          'Full-Stack Developer - Implemented payment system, inventory management and real-time notifications',
       'link': 'https://tinyurl.com/49p7p9fj',
+      'video_url':
+          'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_5mb.mp4',
+      'app_store': 'https://apps.apple.com/us/app/ard-nasr/id1234567891',
+      'google_play':
+          'https://play.google.com/store/apps/details?id=com.ardnasr.app',
+      'github': 'https://github.com/hamed75kazemii/ard-nasr',
+      'status_fa': 'تکمیل شده',
+      'status_en': 'Completed',
+      'is_private': 'false',
     },
     'namjoo': {
       'title': 'نامجو',
       'date_fa': 'اردیبهشت ۱۴۰۳',
+      'image': 'assets/images/namju.png',
       'date_en': 'May 2024',
       'description_fa': 'اپلیکیشن برای شناسایی نام صاحب شماره سیمکارت.',
       'description_en':
           'App connected to SIM card ID database to identify unknown phone numbers.',
+      'role_fa':
+          'توسعه‌دهنده موبایل - یکپارچه‌سازی API، پیاده‌سازی جستجوی هوشمند و رابط کاربری پیشرفته',
+      'role_en':
+          'Mobile Developer - API integration, implemented smart search functionality and advanced UI/UX',
       'link': '',
+      'video_url':
+          'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+      'app_store': 'https://apps.apple.com/us/app/namjoo/id1234567892',
+      'google_play':
+          'https://play.google.com/store/apps/details?id=com.namjoo.app',
+      'github': 'https://github.com/hamed75kazemii/namjoo',
+      'status_fa': 'تکمیل شده',
+      'status_en': 'Completed',
+      'is_private': 'false',
     },
   };
 

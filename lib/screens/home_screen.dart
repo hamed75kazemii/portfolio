@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           CustomScrollView(
-            physics: const BouncingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             controller: scrollController,
             slivers: [
               // Home Hero Section

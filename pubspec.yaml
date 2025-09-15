@@ -1,8 +1,8 @@
 name: hamed_portfolio
 description: Hamed Kazemi's Flutter Developer Portfolio
 publish_to: "none"
-build_number: 1.0.1+1
-version: 1.0.1+1
+build_number: 1.0.2+1
+version: 1.0.2+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -20,6 +20,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   lucide_icons_flutter: ^3.1.0
   font_awesome_flutter: ^10.9.1
+  video_player: ^2.8.2
 
 dev_dependencies:
   flutter_test:
