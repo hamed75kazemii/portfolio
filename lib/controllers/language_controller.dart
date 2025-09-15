@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hamed_portfolio/utils/app_strings.dart';
 
 class LanguageController extends GetxController {
-  final _currentLanguage = 'fa'.obs;
+  final _currentLanguage = 'en'.obs;
 
   String get currentLanguage => _currentLanguage.value;
   Locale get currentLocale => _currentLanguage.value == 'fa'
@@ -14,7 +14,7 @@ class LanguageController extends GetxController {
   void onInit() {
     super.onInit();
     // Set initial language
-    _currentLanguage.value = 'fa';
+    _currentLanguage.value = 'en';
   }
 
   void changeLanguage(String languageCode) {

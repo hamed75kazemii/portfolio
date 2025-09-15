@@ -26,16 +26,28 @@ class AppStrings {
     'fa': {
       'title': 'حامد کاظمی',
       'subtitle': 'توسعه‌دهنده فلاتر',
+      'subtitle2': 'طراح محصول',
+      'subtitle3': 'طراح ریسپانسیو',
       'description':
           'برنامه نویس باتجربه Flutter با علاقه مندی بالا به ساخت اپلیکیشن های خلاقانه',
-      'cta': 'مشاهده رزومه',
+      'cta1': 'مشاهده پروژه ها',
+      'cta2': 'تماس با من',
+      'yearsExperience': 'سال تجربه',
+      'projectsCompleted': 'پروژه تکمیل شده',
+      'clientSatisfaction': 'رضایت مشتری',
     },
     'en': {
       'title': 'Hamed Kazemi',
       'subtitle': 'Flutter Developer',
+      'subtitle2': 'Product Engineer',
+      'subtitle3': 'Responsive Designer',
       'description':
           'Experienced Flutter Developer passionate about building creative applications',
-      'cta': 'View Resume',
+      'cta1': 'View My Work',
+      'cta2': 'Let\'s Connect',
+      'yearsExperience': 'Years Experience',
+      'projectsCompleted': 'Projects Completed',
+      'clientSatisfaction': 'Client Satisfaction',
     },
   };
 
@@ -62,13 +74,53 @@ class AppStrings {
           'Experienced Flutter Developer passionate about building creative applications. With over five years of experience in developing mobile apps for Android, iOS, Web, and PWA, I am seeking opportunities to implement innovative solutions on an international level.',
     },
   };
+  static const Map<String, Map<String, String>> aboutSkills = {
+    'fa': {
+      'skill1': 'کلین کد',
+      'description1':
+          'نوشتن کد قابل نگهداری، قابل مقیاس و بر اساس بهترین روش ها',
+      'skill2': 'طراحی UI/UX',
+      'description2':
+          'طراحی رابط‌های کاربری ساده و جذاب برای بهبود تجربه کاربر',
+      'skill3': 'طراحی ریسپانسیو',
+      'description3': 'طراحی رابط کاربری قابل رسیدگی بر روی تمام دستگاه ها',
+      'skill4': 'بهینه سازی عملکرد',
+      'description4': 'بهینه سازی برای سرعت بارگذاری سریع و انعطاف پذیری',
+    },
+    'en': {
+      'skill1': 'Clean Code',
+      'description1':
+          'Writing maintainable, scalable code following best practices',
+      'skill2': 'UI/UX Design',
+      'description2':
+          'Creating intuitive, user-friendly interfaces that enhance user experience',
+      'skill3': 'Responsive Design',
+      'description3':
+          'Designing responsive interfaces that work seamlessly across devices',
+      'skill4': 'Performance ',
+      'description4': 'Optimizing for fast load times and smooth interactions',
+    },
+  };
 
   // Skills Section
   static const Map<String, Map<String, String>> skills = {
     'fa': {
       'title': 'مهارت‌ها',
-      'flutter': 'Flutter (Dart)',
-      'stateManagement': 'مدیریت حالت (Provider, Bloc, Cubit, GetX)',
+      'subtitle1': 'فرانت اند',
+      'subtitle2': 'تکنولوژی ها',
+      'subtitle3': 'ابزارها',
+    },
+    'en': {
+      'title': 'Skills',
+      'subtitle1': 'Frontend Skills',
+      'subtitle2': 'Backend Skills',
+      'subtitle3': 'Tools and Technologies',
+    },
+  };
+  static const Map<String, Map<String, String>> frontendSkills = {
+    'fa': {
+      'flutter': 'Flutter',
+      'stateManagement': 'Provider, Bloc, Cubit, GetX',
       'solid': 'SOLID',
       'di': 'Dependency Injection',
       'firebase': 'Socket.IO, Firebase',
@@ -78,16 +130,12 @@ class AppStrings {
       'web': 'Flutter Web / PWA',
       'responsive': 'Responsive Design',
       'deployment': 'iOS/Android Deployment',
-      'git': 'GIT / CI-CD',
       'testing': 'Integration Testing / Widget Testing',
       'documentation': 'Documentation',
-      'javascript': 'Javascript/Typescript (Basic)',
-      'nodejs': 'NodeJs (Basic)',
       'pushNotification': 'Push notification',
     },
     'en': {
-      'title': 'Skills',
-      'flutter': 'Flutter (Dart)',
+      'flutter': 'Flutter',
       'stateManagement': 'State management (Provider, Bloc, Cubit, GetX)',
       'solid': 'SOLID',
       'di': 'Dependency Injection',
@@ -98,12 +146,29 @@ class AppStrings {
       'web': 'Flutter Web / PWA',
       'responsive': 'Responsive Design',
       'deployment': 'iOS/Android Deployment',
-      'git': 'GIT / CI-CD',
       'testing': 'Integration Testing / Widget Testing',
       'documentation': 'Documentation',
-      'javascript': 'Javascript/Typescript (Basic)',
-      'nodejs': 'NodeJs (Basic)',
       'pushNotification': 'Push notification',
+    },
+  };
+  static const Map<String, Map<String, String>> toolsSkills = {
+    'fa': {
+      'git': 'GIT / CI-CD',
+      'figma': 'Figma',
+      'aws': 'AWS',
+      'docker': 'Docker',
+      'airTable': 'AirTable',
+      'jira': 'Jira',
+      'bitbucket': 'Bitbucket',
+    },
+    'en': {
+      'git': 'GIT / CI-CD',
+      'figma': 'Figma',
+      'aws': 'AWS',
+      'docker': 'Docker',
+      'airTable': 'AirTable',
+      'jira': 'Jira',
+      'bitbucket': 'Bitbucket',
     },
   };
 
@@ -222,6 +287,38 @@ class AppStrings {
   static const Map<String, String> socialLinks = {
     'instagram': 'https://instagram.com/ilhan_kzy',
     'telegram': 'https://t.me/hamed_kzy',
-    'linkedin': 'https://www.linkedin.com/in/hamed--kazemi',
+    'linkedin': 'https://www.linkedin.com/in/hamed--kazemii',
+    'github': 'https://github.com/hamed75kazemii',
+  };
+
+  // Work Together Section
+  static const Map<String, Map<String, String>> workTogether = {
+    'fa': {
+      'title': 'بیایید با هم کار کنیم',
+      'description':
+          'من همیشه به فرصت‌های جدید و پروژه‌های هیجان‌انگیز علاقه‌مندم. اگر می‌خواهید همکاری کنید یا فقط سلام کنید، خوشحال می‌شوم از شما بشنوم!',
+      'emailButton': 'ایمیل بزنید',
+      'githubButton': 'GitHub',
+      'linkedinButton': 'LinkedIn',
+    },
+    'en': {
+      'title': 'Let\'s Work Together',
+      'description':
+          'I\'m always interested in new opportunities and exciting projects. Feel free to reach out if you\'d like to collaborate or just say hello!',
+      'emailButton': 'Email Me',
+      'githubButton': 'GitHub',
+      'linkedinButton': 'LinkedIn',
+    },
+  };
+
+  // Footer Section
+  static const Map<String, Map<String, String>> footer = {
+    'fa': {
+      'copyright': '© ۲۰۲۵ حامد کاظمی. ساخته شده با Flutter و Material Design.',
+    },
+    'en': {
+      'copyright':
+          '© 2025 Hamed Kazemi. Built with Flutter and Material Design.',
+    },
   };
 }

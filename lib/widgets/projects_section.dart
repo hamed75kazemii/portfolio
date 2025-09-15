@@ -1,20 +1,101 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hamed_portfolio/controllers/language_controller.dart';
 import 'package:hamed_portfolio/utils/app_strings.dart';
+import 'package:hamed_portfolio/utils/screen_utils.dart';
 
-class ProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
+
+  @override
+  State<ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<ProjectsSection> {
+  int _currentIndex = 0;
+  final PageController _pageController = PageController(viewportFraction: 0.7);
+  Timer? _autoPlayTimer;
+
+  final List<String> _projectKeys = [
+    '2gether',
+    'filmator',
+    'ardNasr',
+    'namjoo'
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoPlay();
+  }
+
+  @override
+  void dispose() {
+    _autoPlayTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoPlay() {
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_pageController.hasClients) {
+        _currentIndex = (_currentIndex + 1) % _projectKeys.length;
+        _pageController.animateToPage(
+          _currentIndex,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.fastOutSlowIn,
+        );
+      }
+    });
+  }
+
+  void _stopAutoPlay() {
+    _autoPlayTimer?.cancel();
+  }
+
+  void _nextPage() {
+    _stopAutoPlay();
+    if (_currentIndex < _projectKeys.length - 1) {
+      _currentIndex++;
+    } else {
+      _currentIndex = 0;
+    }
+    _pageController.animateToPage(
+      _currentIndex,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    _startAutoPlay();
+  }
+
+  void _previousPage() {
+    _stopAutoPlay();
+    if (_currentIndex > 0) {
+      _currentIndex--;
+    } else {
+      _currentIndex = _projectKeys.length - 1;
+    }
+    _pageController.animateToPage(
+      _currentIndex,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    _startAutoPlay();
+  }
 
   @override
   Widget build(BuildContext context) {
     final languageController = Get.find<LanguageController>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 800;
 
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.symmetric(
+          vertical: ScreenUtil.getScreenEdgePadding(context)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Section Title
           Text(
@@ -26,20 +107,92 @@ class ProjectsSection extends StatelessWidget {
           ),
           const SizedBox(height: 40),
 
-          // Projects Grid
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio:
-                MediaQuery.of(context).size.width > 800 ? 1.5 : 1.2,
+          // Projects Carousel
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: isDesktop ? 500 : 450,
+              maxWidth: 700,
+            ),
+            //  height: isDesktop ? 500 : 450,
+
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              itemCount: _projectKeys.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isDesktop ? 40.0 : 20.0,
+                  ),
+                  child: _buildProjectCard(
+                    context,
+                    languageController,
+                    _projectKeys[index],
+                  ),
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Page Indicators
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _projectKeys.asMap().entries.map((entry) {
+              return Container(
+                width: 12.0,
+                height: 12.0,
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentIndex == entry.key
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Navigation Buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildProjectCard(context, languageController, '2gether'),
-              _buildProjectCard(context, languageController, 'filmaor'),
-              _buildProjectCard(context, languageController, 'ardNasr'),
-              _buildProjectCard(context, languageController, 'namjoo'),
+              IconButton(
+                onPressed: _previousPage,
+                icon: Center(
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  shape: const CircleBorder(),
+                ),
+              ),
+              const SizedBox(width: 20),
+              IconButton(
+                onPressed: _nextPage,
+                icon: Center(
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  shape: const CircleBorder(),
+                ),
+              ),
             ],
           ),
         ],
@@ -53,6 +206,7 @@ class ProjectsSection extends StatelessWidget {
     final hasLink = project['link']?.isNotEmpty == true;
 
     return Container(
+      height: 450,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).colorScheme.surface,

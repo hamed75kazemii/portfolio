@@ -74,7 +74,6 @@ ios/App/Flipper-Release.xcconfig
 ios/App/Flipper-Runner.xcconfig
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Temporary files
 *.tmp

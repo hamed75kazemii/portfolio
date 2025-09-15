@@ -1,152 +1,214 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hamed_portfolio/controllers/home_controller.dart';
 import 'package:hamed_portfolio/controllers/theme_controller.dart';
 import 'package:hamed_portfolio/controllers/language_controller.dart';
-import 'package:hamed_portfolio/utils/app_strings.dart';
-import 'package:hamed_portfolio/widgets/glassmorphic_app_bar.dart';
+import 'package:hamed_portfolio/method/tap_handler.dart';
+import 'package:hamed_portfolio/utils/section_enum.dart';
+import 'package:hamed_portfolio/widgets/hero/hero_section.dart';
 import 'package:hamed_portfolio/widgets/about_section.dart';
+import 'package:hamed_portfolio/widgets/header/mobile_menu.dart';
 import 'package:hamed_portfolio/widgets/skills_section.dart';
 import 'package:hamed_portfolio/widgets/projects_section.dart';
-import 'package:hamed_portfolio/widgets/experience_section.dart';
-import 'package:hamed_portfolio/widgets/education_section.dart';
-import 'package:hamed_portfolio/widgets/contact_section.dart';
-import 'package:hamed_portfolio/widgets/theme_language_switcher.dart';
+import 'package:hamed_portfolio/widgets/footer_section.dart';
+import 'package:hamed_portfolio/widgets/header/header.dart';
+import 'package:hamed_portfolio/widgets/work_together_section.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final themeController = Get.find<ThemeController>();
-    final languageController = Get.find<LanguageController>();
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  //Controllers
+  late LanguageController languageController;
+  late ThemeController themeController;
+  late HomeController homeController;
+
+  //Scroll Controller
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    languageController = Get.find<LanguageController>();
+    themeController = Get.find<ThemeController>();
+    homeController = Get.find<HomeController>();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      // Handle app bar visibility
+      homeController.handleScroll(scrollController.offset);
+
+      // Handle scroll to top button
+      if (scrollController.offset > 200) {
+        homeController.isShowScrollToTop = true;
+      } else {
+        homeController.isShowScrollToTop = false;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 800;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // Glassmorphic AppBar with gradient and backdrop filter
-          GlassmorphicAppBar(
-            title: languageController.getText(AppStrings.home, 'title'),
-            subtitle: languageController.getText(AppStrings.home, 'subtitle'),
-            actions: [
-              ThemeLanguageSwitcher(
-                onThemeToggle: themeController.toggleTheme,
-                onLanguageToggle: languageController.toggleLanguage,
-                isDarkMode: themeController.isDarkMode,
-                currentLanguage: languageController.currentLanguage,
+      body: Stack(
+        children: [
+          CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              // Home Hero Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.hero),
+                child: const HeroSection(),
+              ),
+
+              // About Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.about),
+                child: const AboutSection(),
+              ),
+
+              // Skills Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.skills),
+                child: const SizedBox(child: SkillsSection()),
+              ),
+
+              // Projects Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.projects),
+                child: const ProjectsSection(),
+              ),
+
+              // Work Together Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.workTogether),
+                child: const WorkTogetherSection(),
+              ),
+
+              // Footer Section
+              SliverToBoxAdapter(
+                key: homeController.getSectionKey(Section.footer),
+                child: const FooterSection(),
               ),
             ],
           ),
 
-          // Home Hero Section
-          SliverToBoxAdapter(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.8,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.1),
-                    Theme.of(context)
-                        .colorScheme
-                        .secondary
-                        .withValues(alpha: 0.1),
-                  ],
-                ),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      languageController.getText(AppStrings.home, 'title'),
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
+          // Pinned Header
+          Obx(() => AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                top: homeController.isShowAppBar ? 0 : -80,
+                left: 0,
+                right: 0,
+                child: _buildPinnedHeader(),
+              )),
+          Obx(
+            () {
+              if (homeController.isOpenMenu) {
+                return const Positioned(
+                    top: 100, left: 50, right: 50, child: MobileMenu());
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
+          Obx(() {
+            if (scrollController.hasClients &&
+                homeController.isShowScrollToTop) {
+              return Positioned(
+                  bottom: 15,
+                  left: languageController.currentLanguage == 'fa' ? 15 : null,
+                  right: languageController.currentLanguage == 'en' ? 15 : null,
+                  child: TapHandler(
+                    onTap: () {
+                      scrollController.animateTo(0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.fastOutSlowIn);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(
+                          width: isDesktop ? 60 : 50,
+                          height: isDesktop ? 60 : 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withValues(alpha: 0.1),
+                            ),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.1),
+                          ),
+                          child: Icon(
+                            Icons.arrow_upward,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      languageController.getText(AppStrings.home, 'subtitle'),
-                      style:
-                          Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      languageController.getText(
-                          AppStrings.home, 'description'),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Scroll to about section
-                        Scrollable.ensureVisible(
-                          context.findAncestorStateOfType<State>()?.context ??
-                              context,
-                          duration: const Duration(milliseconds: 800),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: Text(
-                        languageController.getText(AppStrings.home, 'cta'),
-                        style: const TextStyle(fontSize: 18),
-                      ),
                     ),
-                  ],
-                ),
+                  ));
+            } else {
+              return const SizedBox();
+            }
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPinnedHeader() {
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .outline
+                    .withValues(alpha: 0.1),
+                width: 1,
               ),
             ),
           ),
-
-          // About Section
-          const SliverToBoxAdapter(
-            child: AboutSection(),
+          child: SafeArea(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: AppHeader(
+                      onThemeToggle: themeController.toggleTheme,
+                      onLanguageToggle: languageController.toggleLanguage,
+                      isDarkMode: themeController.isDarkMode,
+                      currentLanguage: languageController.currentLanguage,
+                    ),
+                  ),
+                  AppTitle(
+                    isDarkMode: themeController.isDarkMode,
+                    currentLanguage: languageController.currentLanguage,
+                    openMenu: homeController.toggleMap,
+                  ),
+                ],
+              ),
+            ),
           ),
-
-          // Skills Section
-          const SliverToBoxAdapter(
-            child: SkillsSection(),
-          ),
-
-          // Projects Section
-          const SliverToBoxAdapter(
-            child: ProjectsSection(),
-          ),
-
-          // Experience Section
-          const SliverToBoxAdapter(
-            child: ExperienceSection(),
-          ),
-
-          // Education Section
-          const SliverToBoxAdapter(
-            child: EducationSection(),
-          ),
-
-          // Contact Section
-          const SliverToBoxAdapter(
-            child: ContactSection(),
-          ),
-        ],
+        ),
       ),
     );
   }

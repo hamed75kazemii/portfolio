@@ -2,126 +2,107 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hamed_portfolio/controllers/language_controller.dart';
 import 'package:hamed_portfolio/utils/app_strings.dart';
+import 'package:hamed_portfolio/utils/app_text.dart';
+import 'package:hamed_portfolio/utils/screen_utils.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class AboutSection extends StatelessWidget {
+class AboutSection extends StatefulWidget {
   const AboutSection({super.key});
 
   @override
+  State<AboutSection> createState() => _AboutSectionState();
+}
+
+class _AboutSectionState extends State<AboutSection> {
+  final languageController = Get.find<LanguageController>();
+  late bool isDesktop;
+  @override
   Widget build(BuildContext context) {
-    final languageController = Get.find<LanguageController>();
+    isDesktop = MediaQuery.of(context).size.width > 800;
 
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.symmetric(
+          vertical: 40, horizontal: ScreenUtil.getScreenEdgePadding(context)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Section Title
-          Text(
-            languageController.getText(AppStrings.about, 'title'),
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-          ),
+          _buildSectionTitle(),
           const SizedBox(height: 40),
-
-          // Content Row
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth > 800) {
-                // Desktop layout
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Left side - Personal Info
-                    Expanded(
-                      flex: 1,
-                      child: _buildPersonalInfo(context, languageController),
-                    ),
-                    const SizedBox(width: 40),
-                    // Right side - Description
-                    Expanded(
-                      flex: 2,
-                      child: _buildDescription(context, languageController),
-                    ),
-                  ],
-                );
-              } else {
-                // Mobile layout
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildPersonalInfo(context, languageController),
-                    const SizedBox(height: 30),
-                    _buildDescription(context, languageController),
-                  ],
-                );
-              }
-            },
-          ),
+          _buildContent(),
         ],
       ),
     );
   }
 
-  Widget _buildPersonalInfo(
-      BuildContext context, LanguageController languageController) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Profile Image Placeholder
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-            ),
-          ),
-          child: const Icon(
-            Icons.person,
-            size: 80,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 24),
+  Widget _buildSectionTitle() {
+    return Text(
+      languageController.getText(AppStrings.about, 'title'),
+      style: AppTextStyles.displayXXLarge(
+        weight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
 
-        // Personal Details
-        _buildInfoRow(
+  _buildContent() {
+    if (isDesktop) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(flex: 3, child: _buildDescription()),
+          const SizedBox(width: 40),
+          Expanded(flex: 4, child: _buildPersonalSkill()),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          _buildDescription(),
+          const SizedBox(height: 40),
+          _buildPersonalSkill(),
+        ],
+      );
+    }
+  }
+
+  Widget _buildPersonalSkill() {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      direction: Axis.horizontal,
+      children: [
+        _buildAboutSkillItem(
           context,
-          Icons.person,
-          languageController.getText(AppStrings.about, 'name'),
+          LucideIcons.code,
+          languageController.getText(
+            AppStrings.aboutSkills,
+            'skill1',
+          ),
+          languageController.getText(AppStrings.aboutSkills, 'description1'),
         ),
-        _buildInfoRow(
+        _buildAboutSkillItem(
           context,
-          Icons.work,
-          languageController.getText(AppStrings.about, 'role'),
+          LucideIcons.penTool,
+          languageController.getText(AppStrings.aboutSkills, 'skill2'),
+          languageController.getText(AppStrings.aboutSkills, 'description2'),
         ),
-        _buildInfoRow(
+        _buildAboutSkillItem(
           context,
-          Icons.email,
-          languageController.getText(AppStrings.about, 'email'),
+          LucideIcons.table2,
+          languageController.getText(AppStrings.aboutSkills, 'skill3'),
+          languageController.getText(AppStrings.aboutSkills, 'description3'),
         ),
-        _buildInfoRow(
+        _buildAboutSkillItem(
           context,
-          Icons.phone,
-          languageController.getText(AppStrings.about, 'phone'),
-        ),
-        _buildInfoRow(
-          context,
-          Icons.location_on,
-          languageController.getText(AppStrings.about, 'location'),
+          LucideIcons.rocket,
+          languageController.getText(AppStrings.aboutSkills, 'skill4'),
+          languageController.getText(AppStrings.aboutSkills, 'description4'),
         ),
       ],
     );
   }
 
-  Widget _buildDescription(
-      BuildContext context, LanguageController languageController) {
+  Widget _buildDescription() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -131,13 +112,13 @@ class AboutSection extends StatelessWidget {
                 height: 1.8,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
-          textAlign: TextAlign.justify,
+          //textAlign: TextAlign.justify,
         ),
         const SizedBox(height: 24),
 
         // Skills Preview
         Wrap(
-          spacing: 12,
+          spacing: isDesktop ? 12 : 8,
           runSpacing: 8,
           children: [
             'Flutter',
@@ -146,6 +127,9 @@ class AboutSection extends StatelessWidget {
             'Web Development',
             'PWA',
             'Firebase',
+            'Socket.IO',
+            'REST API',
+            'GraphQL',
             'State Management',
           ]
               .map((skill) => Chip(
@@ -163,26 +147,130 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: Theme.of(context).colorScheme.primary,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+  Widget _buildAboutSkillItem(
+      BuildContext context, IconData icon, String text, String description) {
+    return AboutSkillItem(
+      icon: icon,
+      text: text,
+      description: description,
+    );
+  }
+}
+
+class AboutSkillItem extends StatefulWidget {
+  final IconData icon;
+  final String text;
+  final String description;
+
+  const AboutSkillItem({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.description,
+  });
+
+  @override
+  State<AboutSkillItem> createState() => AboutSkillItemState();
+}
+
+class AboutSkillItemState extends State<AboutSkillItem> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 800;
+    final screenwidth = MediaQuery.of(context).size.width;
+    final screenheight = MediaQuery.of(context).size.height;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: GestureDetector(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: isDesktop
+              ? (screenwidth -
+                      (40 +
+                          24 +
+                          2 * ScreenUtil.getScreenEdgePadding(context))) *
+                  2 /
+                  7
+              : (screenwidth -
+                      (ScreenUtil.getScreenEdgePadding(context) * 2 + 2 * 6)) /
+                  2,
+          height: isDesktop ? screenheight / 3.2 : screenheight / 2.7,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isHovered
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
+                : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isHovered
+                ? [
+                    BoxShadow(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
+            border: Border.all(
+              color: isHovered
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              width: isHovered ? 2 : 1,
             ),
           ),
-        ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                widget.icon,
+                color: Theme.of(context).colorScheme.primary,
+                size: isDesktop ? 40 : 30,
+                shadows: isHovered
+                    ? [
+                        Shadow(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : null,
+              ),
+              SizedBox(height: isDesktop ? 12 : 8),
+              Text(
+                widget.text,
+                style: isDesktop
+                    ? AppTextStyles.bodyLarge(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        weight: isHovered ? FontWeight.w600 : FontWeight.normal,
+                      )
+                    : AppTextStyles.bodyMedium(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        weight: isHovered ? FontWeight.w600 : FontWeight.normal,
+                      ),
+              ),
+              SizedBox(height: isDesktop ? 12 : 5),
+              Text(
+                widget.description,
+                style: isDesktop
+                    ? AppTextStyles.bodyXMedium(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      )
+                    : AppTextStyles.bodySmall(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
