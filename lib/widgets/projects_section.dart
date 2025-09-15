@@ -308,24 +308,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Theme.of(context).colorScheme.surface,
             Theme.of(context).colorScheme.surface.withOpacity(0.8),
+            Theme.of(context).colorScheme.surface.withOpacity(0.5),
           ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
-            blurRadius: 40,
-            offset: const Offset(0, 20),
-            spreadRadius: 0,
-          ),
-        ],
         border: Border.all(
           color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
           width: 1,

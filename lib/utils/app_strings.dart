@@ -209,7 +209,7 @@ class AppStrings {
       'is_private': 'true',
     },
     'prochef': {
-      'title': 'ProChef',
+      'title': 'Pro Chef',
       'date_fa': 'خرداد ۱۴۰۳',
       'date_en': 'Jun 2024',
       'image': 'assets/images/chef_pro.png',
@@ -255,7 +255,7 @@ class AppStrings {
       'is_private': 'true',
     },
     'ardNasr': {
-      'title': 'آرد نصر',
+      'title': 'Ard Nasr',
       'image': 'assets/images/ard_nasr.png',
       'date_fa': 'دی ۱۴۰۲',
       'date_en': 'Jan 2024',
@@ -279,7 +279,7 @@ class AppStrings {
       'is_private': 'false',
     },
     'namjoo': {
-      'title': 'نامجو',
+      'title': 'Namjoo',
       'date_fa': 'اردیبهشت ۱۴۰۳',
       'image': 'assets/images/namju.png',
       'date_en': 'May 2024',
