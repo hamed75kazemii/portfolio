@@ -119,7 +119,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtil.getScreenEdgePadding(context),
-        horizontal: isDesktop ? 40 : 20,
+        horizontal: isDesktop ? 40 : 0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,7 +184,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     } else {
       // Mobile/Tablet: Show carousel
       return SizedBox(
-        height: isTablet ? 580 : 380,
+        height: 360,
         child: PageView.builder(
           controller: _pageController,
           onPageChanged: (index) {
@@ -238,7 +238,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       children: [
         _buildNavButton(
           context,
-          icon: Icons.arrow_back_ios,
+          icon: Icons.arrow_back_ios_new,
           onPressed: _previousPage,
         ),
         const SizedBox(width: 20),
@@ -267,16 +267,21 @@ class _ProjectsSectionState extends State<ProjectsSection> {
           ),
         ],
       ),
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(icon, color: Theme.of(context).colorScheme.primary),
-        style: IconButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          foregroundColor: Theme.of(context).colorScheme.primary,
-          shape: const CircleBorder(),
-          padding: const EdgeInsets.all(12),
-        ),
-      ),
+      child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          child: IconButton(
+            onPressed: onPressed,
+            icon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+            style: IconButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              foregroundColor: Theme.of(context).colorScheme.primary,
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(12),
+            ),
+          )),
     );
   }
 
@@ -301,214 +306,349 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     final image =
         project['image']?.isNotEmpty == true ? project['image']! : null;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).colorScheme.surface.withOpacity(0.8),
-            Theme.of(context).colorScheme.surface.withOpacity(0.5),
-          ],
-        ),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-          width: 1,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          onTap: () =>
-              _showProjectDetails(context, languageController, projectKey),
-          borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Project Header with Status
-                Expanded(
+    return _ProjectCard(
+      project: project,
+      languageController: languageController,
+      projectKey: projectKey,
+      hasVideo: hasVideo,
+      hasAppStore: hasAppStore,
+      hasGooglePlay: hasGooglePlay,
+      hasGithub: hasGithub,
+      isPrivate: isPrivate,
+      status: status,
+      isCompleted: isCompleted,
+      image: image,
+      isDesktop: isDesktop,
+      isMobile: isMobile,
+    );
+  }
+}
+
+class _ProjectCard extends StatefulWidget {
+  final Map<String, String> project;
+  final LanguageController languageController;
+  final String projectKey;
+  final bool hasVideo;
+  final bool hasAppStore;
+  final bool hasGooglePlay;
+  final bool hasGithub;
+  final bool isPrivate;
+  final String status;
+  final bool isCompleted;
+  final String? image;
+  final bool isDesktop;
+  final bool isMobile;
+
+  const _ProjectCard({
+    required this.project,
+    required this.languageController,
+    required this.projectKey,
+    required this.hasVideo,
+    required this.hasAppStore,
+    required this.hasGooglePlay,
+    required this.hasGithub,
+    required this.isPrivate,
+    required this.status,
+    required this.isCompleted,
+    required this.image,
+    required this.isDesktop,
+    required this.isMobile,
+  });
+
+  @override
+  State<_ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<_ProjectCard>
+    with SingleTickerProviderStateMixin {
+  bool isHovered = false;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => isHovered = true);
+        _animationController.forward();
+      },
+      onExit: (_) {
+        setState(() => isHovered = false);
+        _animationController.reverse();
+      },
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              color: isHovered
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
+                  : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: isHovered
+                  ? [
+                      BoxShadow(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                  : null,
+              border: Border.all(
+                color: isHovered
+                    ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
+                    : Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              child: InkWell(
+                onTap: () => _showProjectDetails(
+                    context, widget.languageController, widget.projectKey),
+                borderRadius: BorderRadius.circular(12),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
+                      // Project Header with Status
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isCompleted ? Colors.green : Colors.orange,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            status,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: isCompleted
+                          Row(
+                            children: [
+                              Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: widget.isCompleted
+                                      ? Colors.green
+                                      : Colors.orange,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                widget.status,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: widget.isCompleted
                                           ? Colors.green
                                           : Colors.orange,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          if (image != null)
-                            SizedBox(
-                              width: isMobile ? 50 : 70,
-                              height: isMobile ? 50 : 70,
-                              child: Center(child: Image.asset(image)),
-                            ),
-                          SizedBox(width: isMobile ? 12 : 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                project['title']!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontSize: isMobile ? 18 : 20,
-                                    ),
-                              ),
-                              Text(
-                                languageController.currentLanguage == 'fa'
-                                    ? project['date_fa']!
-                                    : project['date_en']!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withOpacity(0.7),
-                                      fontSize: isMobile ? 12 : 14,
-                                    ),
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          if (hasVideo)
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context)
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              if (widget.image != null)
+                                SizedBox(
+                                  width: widget.isMobile ? 50 : 70,
+                                  height: widget.isMobile ? 50 : 70,
+                                  child:
+                                      Center(child: Image.asset(widget.image!)),
+                                ),
+                              SizedBox(width: widget.isMobile ? 12 : 16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.project['title']!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontSize: widget.isMobile ? 18 : 20,
+                                        ),
+                                  ),
+                                  Text(
+                                    widget.languageController.currentLanguage ==
+                                            'fa'
+                                        ? widget.project['date_fa']!
+                                        : widget.project['date_en']!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.7),
+                                          fontSize: widget.isMobile ? 12 : 14,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              if (widget.hasVideo)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.1),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () => _showVideoPlayer(
+                                        context, widget.projectKey),
+                                    icon: Icon(
+                                      Icons.play_circle_filled,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      size: widget.isMobile ? 20 : 24,
+                                    ),
+                                    padding: EdgeInsets.all(
+                                        widget.isMobile ? 8 : 12),
+                                    constraints: BoxConstraints(
+                                      minWidth: widget.isMobile ? 33 : 44,
+                                      minHeight: widget.isMobile ? 33 : 44,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Project Description
+                      Text(
+                        widget.languageController.currentLanguage == 'fa'
+                            ? widget.project['description_fa']!
+                            : widget.project['description_en']!,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.8),
+                              height: 1.5,
+                              fontSize: widget.isMobile ? 13 : 14,
+                            ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // Project Role (if available)
+                      if (widget.project.containsKey('role_fa') &&
+                          widget.project['role_fa']!.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: widget.isMobile ? 12 : 16,
+                            vertical: widget.isMobile ? 6 : 8,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context)
                                     .colorScheme
                                     .primary
                                     .withOpacity(0.1),
-                              ),
-                              child: IconButton(
-                                onPressed: () =>
-                                    _showVideoPlayer(context, projectKey),
-                                icon: Icon(
-                                  Icons.play_circle_filled,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: isMobile ? 20 : 24,
-                                ),
-                                padding: EdgeInsets.all(isMobile ? 8 : 12),
-                                constraints: BoxConstraints(
-                                  minWidth: isMobile ? 33 : 44,
-                                  minHeight: isMobile ? 33 : 44,
-                                ),
-                              ),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.1),
+                              ],
                             ),
-                        ],
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            widget.languageController.currentLanguage == 'fa'
+                                ? widget.project['role_fa']!
+                                : widget.project['role_en']!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: widget.isMobile ? 10 : 11,
+                                ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+
+                      const Spacer(),
+                      // Action Buttons
+                      _buildActionButtons(
+                        context,
+                        widget.languageController,
+                        widget.project,
+                        widget.hasAppStore,
+                        widget.hasGooglePlay,
+                        widget.hasGithub,
+                        widget.isPrivate,
+                        widget.isMobile,
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 10),
-
-                // Project Description
-                Text(
-                  languageController.currentLanguage == 'fa'
-                      ? project['description_fa']!
-                      : project['description_en']!,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.8),
-                        height: 1.5,
-                        fontSize: isMobile ? 13 : 14,
-                      ),
-                  maxLines: isDesktop ? 3 : 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 10),
-
-                // Project Role (if available)
-                if (project.containsKey('role_fa') &&
-                    project['role_fa']!.isNotEmpty)
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isMobile ? 12 : 16,
-                      vertical: isMobile ? 6 : 8,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
-                          Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withOpacity(0.1),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
-                      languageController.currentLanguage == 'fa'
-                          ? project['role_fa']!
-                          : project['role_en']!,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: isMobile ? 10 : 11,
-                          ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-
-                const Spacer(),
-                // Action Buttons
-                _buildActionButtons(
-                  context,
-                  languageController,
-                  project,
-                  hasAppStore,
-                  hasGooglePlay,
-                  hasGithub,
-                  isPrivate,
-                  isMobile,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
+  }
+
+  void _showProjectDetails(
+    BuildContext context,
+    LanguageController languageController,
+    String projectKey,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => _ProjectDetailsDialog(
+        projectKey: projectKey,
+        languageController: languageController,
+      ),
+    );
+  }
+
+  void _showVideoPlayer(BuildContext context, String projectKey) {
+    final project = AppStrings.projectDetails[projectKey]!;
+    final videoUrl = project['video_url'];
+
+    if (videoUrl != null && videoUrl.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => _VideoPlayerDialog(
+          videoUrl: videoUrl,
+          projectTitle: project['title']!,
+        ),
+      );
+    }
   }
 
   Widget _buildActionButtons(
@@ -611,35 +751,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         ),
       ),
     );
-  }
-
-  void _showProjectDetails(
-    BuildContext context,
-    LanguageController languageController,
-    String projectKey,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) => _ProjectDetailsDialog(
-        projectKey: projectKey,
-        languageController: languageController,
-      ),
-    );
-  }
-
-  void _showVideoPlayer(BuildContext context, String projectKey) {
-    final project = AppStrings.projectDetails[projectKey]!;
-    final videoUrl = project['video_url'];
-
-    if (videoUrl != null && videoUrl.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) => _VideoPlayerDialog(
-          videoUrl: videoUrl,
-          projectTitle: project['title']!,
-        ),
-      );
-    }
   }
 
   Future<void> _launchUrl(String url) async {
