@@ -1,8 +1,8 @@
 name: hamed_portfolio
 description: Hamed Kazemi's Flutter Developer Portfolio
 publish_to: "none"
-build_number: 1.0.2+1
-version: 1.0.2+1
+build_number: 1.0.4+1
+version: 1.0.4+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

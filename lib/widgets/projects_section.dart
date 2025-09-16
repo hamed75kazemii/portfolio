@@ -16,16 +16,16 @@ class ProjectsSection extends StatefulWidget {
 
 class _ProjectsSectionState extends State<ProjectsSection> {
   int _currentIndex = 0;
-  final PageController _pageController = PageController(viewportFraction: 0.8);
+  final PageController _pageController = PageController(viewportFraction: 0.85);
   Timer? _autoPlayTimer;
   Map<String, VideoPlayerController?> _videoControllers = {};
 
   final List<String> _projectKeys = [
     '2gether',
+    'prochef',
     'filmator',
     'ardNasr',
     'namjoo',
-    'prochef'
   ];
 
   @override
@@ -184,7 +184,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     } else {
       // Mobile/Tablet: Show carousel
       return SizedBox(
-        height: isTablet ? 420 : 320,
+        height: isTablet ? 580 : 380,
         child: PageView.builder(
           controller: _pageController,
           onPageChanged: (index) {
@@ -581,18 +581,18 @@ class _ProjectsSectionState extends State<ProjectsSection> {
   }) {
     return Container(
       constraints: BoxConstraints(
-        minWidth: isMobile ? 80 : 100,
+        minWidth: isMobile ? 80 : 120,
       ),
       child: ElevatedButton.icon(
         onPressed: onPressed,
         icon: Icon(
           icon,
-          size: isMobile ? 14 : 16,
+          size: isMobile ? 14 : 20,
         ),
         label: Text(
           label,
           style: TextStyle(
-            fontSize: isMobile ? 10 : 11,
+            fontSize: isMobile ? 10 : 14,
             fontWeight: FontWeight.w600,
           ),
         ),
